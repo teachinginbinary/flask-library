@@ -3,5 +3,3 @@
 # Ignorar el entorno virtual
 venv/
 
-# Ignorar archivos de configuración específicos del entorno
-config.py
