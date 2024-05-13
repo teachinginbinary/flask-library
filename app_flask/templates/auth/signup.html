@@ -1,0 +1,129 @@
+{% extends 'base.html'%}
+{% block content %}
+    <div class="container mt-5" style="margin-top: 100px;">
+        <h2>Signup</h2>
+        
+        <form action="{{ url_for('auth.signup') }}" method="POST" class="form-horizontal">
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">Ingresa tu nombre de usuario</label>
+                <div class="col-sm-10">
+                    <input type="text" name="username" id="username" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">Ingresa tu contraseña</label>
+                <div class="col-sm-10">
+                    <input type="password" name="password" id="password" class="form-control">
+                    <i class="fas fa-eye" id="togglePassword"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password2" class="col-sm-2 control-label">Vuelve a ingresar tu contraseña</label>
+                <div class="col-sm-10">
+                    <input type="password" name="password2" id="password2" class="form-control">
+                    <i class="fas fa-eye" id="togglePassword2"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Crear usuario</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <p class="text-3xl text-danger font-custom">{{ error }}</p>                    
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <style>
+
+        /* Estilos para posicionar el ícono de ojo */
+       .fas {
+            position: absolute;
+            right: 30px;
+            top: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const togglePassword = document.getElementById('togglePassword');
+            const togglePassword2 = document.getElementById('togglePassword2');
+
+            togglePassword.addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    togglePassword.classList.remove("fa-eye");
+                    togglePassword.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    togglePassword.classList.remove("fa-eye-slash");
+                    togglePassword.classList.add("fa-eye");
+                }
+            });
+
+            togglePassword2.addEventListener('click', function() {
+                const passwordInput2 = document.getElementById('password2');
+                if (passwordInput2.type === "password") {
+                    passwordInput2.type = "text";
+                    togglePassword2.classList.remove("fa-eye");
+                    togglePassword2.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput2.type = "password";
+                    togglePassword2.classList.remove("fa-eye-slash");
+                    togglePassword2.classList.add("fa-eye");
+                }
+            });
+
+            document.querySelector('form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+                var password2 = document.getElementById('password2').value;
+            
+                if (username.length < 8) {
+                    document.querySelector('p').textContent = "El nombre de usuario debe tener al menos 8 caracteres";
+                    return;
+                }
+        
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    document.querySelector('p').textContent = "La contraseña debe tener al menos 8 caracteres, 1 mayúscula, 1 minúscula y 1 número";
+                    return;
+                }
+            
+                if (password!== password2) {
+                    document.querySelector('p').textContent = "Las contraseñas son incorrectas";
+                    return;
+                }
+            
+                fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        username: username,
+                        password: password
+                    })
+                })
+              .then(response => response.json())
+              .then(data => {
+                    if (data.error) {
+                        document.querySelector('p').textContent = data.error;
+                    } else {
+                        console.log("Usuario creado exitosamente");
+                        window.location.href = '/';  // Redirige a la página de inicio
+                    }
+                })
+              .catch(error => {
+                    console.error('Error:', error);
+                    document.querySelector('p').textContent = "Hubo un error al crear el usuario";
+                });
+            });
+        });
+    </script>
+{% endblock content %}

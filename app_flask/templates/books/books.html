@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+{% block content %}
+
+{% for book in books %}
+<div class="container mt-5" style="margin-top: 100px;">
+    <div class="card mb-4">
+        <img src="{{ book.cover_photo }}" alt="Cover Photo" class="card-img-top">
+        <div class="card-body">
+            <h2 class="card-title">{{ book.name }}</h2>
+            <p class="card-text">{{ book.description }}</p>
+            <button class="btn btn-primary" onclick="reserveBookButtonClick('{{ book.id }}')">Reservar</button>
+
+            {% if current_user.is_special %}
+            <button class="btn btn-danger" onclick="deleteBookButtonClick('{{ book.id }}')">Eliminar el libro</button>
+            {% endif %}
+            
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+<script>
+    function deleteBookButtonClick(book_id) {
+        window.location.href = `delete-book/${book_id}`;
+        console.info('Book deleted successfully')
+    }
+
+    function reserveBookButtonClick(book_id) {
+        window.location.href = `reserve_book/${book_id}`;
+        console.info('Book deleted successfully')
+    }
+    
+</script>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<div class="container mt-5" style="margin-top: 100px;">
+    <h1>Bienvenidos lectores a esta libroteca</h1>
+    <p>Podrán buscar, reservar y revisar nuestra amplia gama de libros electrónicos.</p>
+    <p>Ofrecemos una variedad de géneros para todos los gustos, desde ficción hasta no ficción, pasando por ciencia ficción, fantasía, terror, y más. Nuestra biblioteca digital está actualizada constantemente con nuevos títulos, asegurándonos de que siempre tengas algo nuevo para leer.</p>
+    <p>Además, nuestros usuarios pueden dejar sus opiniones y calificaciones sobre los libros que han leído, contribuyendo así a la comunidad de lectores. ¡Únete a nosotros y descubre el mundo de la lectura digital!</p>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <p class="text-3xl text-danger font-custom">{{ error }}</p>                    
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
